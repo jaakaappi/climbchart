@@ -5,6 +5,8 @@ import {
   BarChart,
   Bar,
   Rectangle,
+  Line,
+  ComposedChart,
 } from "recharts";
 import { Card } from "./Card";
 import { FlexContainer } from "./FlexContainer";
@@ -67,12 +69,6 @@ type Ascent = {
   grade: string;
 };
 
-type Session = {
-  startTime: DateTime;
-  endTime: DateTime;
-  ascents: Ascent[];
-};
-
 const ascentsByGradeThisMonth = grades.map((grade) => {
   return {
     grade,
@@ -84,6 +80,7 @@ const allMonthlySessions = Info.months("short").map((month) => {
   return {
     month,
     count: Math.round(Math.random() * 10 + 10),
+    duration: Math.round(Math.random() * 210 + 30),
   };
 });
 
@@ -150,16 +147,6 @@ const App = () => {
     return <Rectangle {...props} fill={gradeColors[props.grade]} />;
   };
 
-  // const renderCalendarTileContent = ({ date }: { date: Date }) => {
-  //   if (
-  //     sessionDayTree[date.getFullYear()]?.[date.getMonth()].includes(
-  //       date.getDate()
-  //     )
-  //   )
-  //     return "climbedTile";
-  //   else return "dayTile";
-  // };
-
   return (
     <>
       <FlexContainer
@@ -178,14 +165,33 @@ const App = () => {
           <FlexContainer style={{ flexDirection: "column" }}>
             <Text>Sessions this year</Text>
             <ResponsiveContainer height={320}>
-              <BarChart
+              <ComposedChart
                 data={allMonthlySessions}
-                margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+                margin={{ top: 20, right: 30, left: 30, bottom: 0 }}
               >
                 <XAxis dataKey="month" />
-                <YAxis />
-                <Bar type="monotone" dataKey="count" fill="#E7C300" />
-              </BarChart>
+                <YAxis
+                  yAxisId="left"
+                  label={{ value: "Count", angle: -90, position: "insideLeft" }}
+                  orientation="left"
+                />
+                <YAxis
+                  yAxisId="right"
+                  label={{
+                    value: "Duration",
+                    angle: 90,
+                    position: "insideRight",
+                  }}
+                  orientation="right"
+                />
+                <Bar
+                  yAxisId="left"
+                  type="monotone"
+                  dataKey="count"
+                  fill="#E7C300"
+                />
+                <Line yAxisId="right" type="monotone" dataKey="duration" />
+              </ComposedChart>
             </ResponsiveContainer>
           </FlexContainer>
         </Card>
