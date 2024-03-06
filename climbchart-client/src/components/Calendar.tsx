@@ -22,7 +22,6 @@ export const Calendar = ({ month, year, coloredDays }: CalendarProps) => {
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(7,1fr)",
-        padding: 8,
         maxWidth: "fit-content",
       }}
     >
@@ -30,7 +29,11 @@ export const Calendar = ({ month, year, coloredDays }: CalendarProps) => {
         return (
           <div
             key={"calendar-weekday-" + index}
-            style={{ padding: 8, textAlign: "center" }}
+            style={{
+              padding: 8,
+              textAlign: "center",
+              borderBottom: "1px solid lightGrey",
+            }}
           >
             {weekday}
           </div>
@@ -40,11 +43,13 @@ export const Calendar = ({ month, year, coloredDays }: CalendarProps) => {
         .fill("")
         .map((_, index) => (
           <div key={"calendar-day-" + index} style={{ padding: 8 }}>
-            {index < offset ? (
+            {index < offset ||
+            index > (dateTime.daysInMonth ?? 31) + offset - 1 ? (
               <div></div>
             ) : (
               <div
                 style={{
+                  textAlign: "center",
                   ...(coloredDays.includes(index + 1 - offset)
                     ? coloredDayStyle
                     : {}),

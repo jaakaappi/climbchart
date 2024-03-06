@@ -87,23 +87,11 @@ const App = () => {
             <Text bold title>
               Sessions this year
             </Text>
-            <ResponsiveContainer height={320}>
+            <ResponsiveContainer minHeight={150}>
               <ComposedChart data={allMonthlySessions}>
-                <XAxis dataKey="month" />
-                <YAxis
-                  yAxisId="left"
-                  label={{ value: "Count", angle: -90, position: "insideLeft" }}
-                  orientation="left"
-                />
-                <YAxis
-                  yAxisId="right"
-                  label={{
-                    value: "Duration",
-                    angle: 90,
-                    position: "insideRight",
-                  }}
-                  orientation="right"
-                />
+                <XAxis dataKey="month" height={18} />
+                <YAxis width={20} yAxisId="left" orientation="left" />
+                <YAxis width={30} yAxisId="right" orientation="right" />
                 <Bar
                   yAxisId="left"
                   type="monotone"
@@ -113,6 +101,9 @@ const App = () => {
                 <Line yAxisId="right" type="monotone" dataKey="duration" />
               </ComposedChart>
             </ResponsiveContainer>
+            <Text style={{ textAlign: "center" }}>
+              Bars, left: count. Line, right: duration
+            </Text>
           </FlexContainer>
         </Card>
         <FlexContainer style={{ flexWrap: "wrap" }}>
@@ -121,10 +112,10 @@ const App = () => {
               <Text bold title>
                 Sends this month
               </Text>
-              <ResponsiveContainer height={320}>
+              <ResponsiveContainer minHeight={150}>
                 <BarChart data={ascentsByGradeThisMonth}>
                   <XAxis dataKey="grade" />
-                  <YAxis />
+                  <YAxis width={20} />
                   <Bar type="monotone" dataKey="count" shape={CustomColorBar} />
                 </BarChart>
               </ResponsiveContainer>
@@ -132,7 +123,7 @@ const App = () => {
           </Card>
           <Card style={{ flexGrow: 1 }}>
             <FlexContainer
-              style={{ flexDirection: "column", alignItems: "center" }}
+              style={{ flexDirection: "column", alignItems: "center", gap: 8 }}
             >
               <Text bold title>
                 Session calendar
@@ -173,27 +164,38 @@ const App = () => {
               return (
                 <FlexContainer
                   key={`session-${index}`}
-                  style={{ padding: "12px" }}
+                  style={{ padding: "12px", flexWrap: "wrap" }}
                 >
                   <FlexContainer
-                    style={{ flexDirection: "column", minWidth: "fit-content" }}
+                    style={{
+                      flexDirection: "column",
+                      minWidth: "fit-content",
+                      flexGrow: 1,
+                    }}
                   >
                     <Text>{timestampString}</Text>
                     <Text>{`${duration.hours} hours ${Math.round(
                       duration.minutes
                     )} minutes`}</Text>
                   </FlexContainer>
-                  <ResponsiveContainer height={160}>
-                    <BarChart data={session.ascents}>
-                      <XAxis dataKey="grade" />
-                      <YAxis />
-                      <Bar
-                        type="monotone"
-                        dataKey="count"
-                        shape={CustomColorBar}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <FlexContainer
+                    style={{
+                      flexGrow: 1,
+                      minWidth: "75%",
+                    }}
+                  >
+                    <ResponsiveContainer minHeight={128}>
+                      <BarChart data={session.ascents}>
+                        <XAxis dataKey="grade" />
+                        <YAxis width={20} />
+                        <Bar
+                          type="monotone"
+                          dataKey="count"
+                          shape={CustomColorBar}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </FlexContainer>
                 </FlexContainer>
               );
             })}
