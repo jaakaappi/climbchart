@@ -32,7 +32,7 @@ import {
   gyms,
 } from "./testData";
 
-export const gradeColors = {
+const gradeColors = {
   "3": "#66B572",
   "4": "#66B572",
   "5": "#E7C300",
