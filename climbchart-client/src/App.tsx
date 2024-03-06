@@ -320,9 +320,6 @@ const CustomColorBar = (props) => {
     "7b": "#C62D37",
     "7b+": "#C62D37",
   };
-  //@ts-ignore
-  console.log(gradeColors);
-  console.log(props.grade);
 
   //@ts-ignore
   return <Rectangle {...props} fill={gradeColors[props.grade]} />;
