@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --outDir ../docs",
+    "build": "tsc && vite build",
+    "build:gh": "tsc && vite build --outDir ../docs --emptyOutDir --base https://jaakaappi.github.com/climbchart",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
