@@ -23,10 +23,18 @@ export const Calendar = ({ month, year, coloredDays }: CalendarProps) => {
         display: "grid",
         gridTemplateColumns: "repeat(7,1fr)",
         padding: 8,
+        maxWidth: "fit-content",
       }}
     >
-      {Info.weekdays("short").map((weekday) => {
-        return <div style={{ padding: 8, textAlign: "center" }}>{weekday}</div>;
+      {Info.weekdays("short").map((weekday, index) => {
+        return (
+          <div
+            key={"calendar-weekday-" + index}
+            style={{ padding: 8, textAlign: "center" }}
+          >
+            {weekday}
+          </div>
+        );
       })}
       {Array(31 + offset)
         .fill("")

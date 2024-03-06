@@ -32,6 +32,23 @@ import {
   gyms,
 } from "./testData";
 
+export const gradeColors = {
+  "3": "#66B572",
+  "4": "#66B572",
+  "5": "#E7C300",
+  "5+": "#E7C300",
+  "6a": "#4069A7",
+  "6a+": "#4069A7",
+  "6b": "#4069A7",
+  "6b+": "#FF9533",
+  "6c": "#FF9533",
+  "6c+": "#FF9533",
+  "7a": "#FF9533",
+  "7a+": "#C62D37",
+  "7b": "#C62D37",
+  "7b+": "#C62D37",
+};
+
 const App = () => {
   // Main view
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -84,16 +101,17 @@ const App = () => {
         }}
       >
         <Card>
-          <Text>Climb Chart</Text>
+          <Text bold title>
+            Climb Chart
+          </Text>
         </Card>
         <Card style={{ flexGrow: 1 }}>
           <FlexContainer style={{ flexDirection: "column" }}>
-            <Text>Sessions this year</Text>
+            <Text bold title>
+              Sessions this year
+            </Text>
             <ResponsiveContainer height={320}>
-              <ComposedChart
-                data={allMonthlySessions}
-                margin={{ top: 20, right: 30, left: 30, bottom: 0 }}
-              >
+              <ComposedChart data={allMonthlySessions}>
                 <XAxis dataKey="month" />
                 <YAxis
                   yAxisId="left"
@@ -121,14 +139,13 @@ const App = () => {
           </FlexContainer>
         </Card>
         <FlexContainer style={{ flexWrap: "wrap" }}>
-          <Card style={{ flex: 1 }}>
+          <Card style={{ flexGrow: 2 }}>
             <FlexContainer style={{ flexDirection: "column" }}>
-              <Text>Sends this month</Text>
+              <Text bold title>
+                Sends this month
+              </Text>
               <ResponsiveContainer height={320}>
-                <BarChart
-                  data={ascentsByGradeThisMonth}
-                  margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
-                >
+                <BarChart data={ascentsByGradeThisMonth}>
                   <XAxis dataKey="grade" />
                   <YAxis />
                   <Bar type="monotone" dataKey="count" shape={CustomColorBar} />
@@ -136,9 +153,13 @@ const App = () => {
               </ResponsiveContainer>
             </FlexContainer>
           </Card>
-          <Card style={{ maxWidth: "fit-content" }}>
-            <FlexContainer style={{ flexDirection: "column" }}>
-              <Text>Session calendar</Text>
+          <Card style={{ flexGrow: 1 }}>
+            <FlexContainer
+              style={{ flexDirection: "column", alignItems: "center" }}
+            >
+              <Text bold title>
+                Session calendar
+              </Text>
               <Calendar
                 year={DateTime.now().year}
                 month={DateTime.now().month}
@@ -148,11 +169,13 @@ const App = () => {
           </Card>
         </FlexContainer>
         <Card style={{ flexGrow: 1 }}>
-          <Text>Last 10 sessions</Text>
+          <Text bold title>
+            Last 10 sessions
+          </Text>
           {sessionData
             .slice(-11, -1)
             .reverse()
-            .map((session) => {
+            .map((session, index) => {
               const timestampString = session.startTime.hasSame(
                 DateTime.local(),
                 "day"
@@ -171,16 +194,21 @@ const App = () => {
               ]);
 
               return (
-                <FlexContainer style={{ padding: "12px" }}>
-                  <Text>{`${timestampString} - ${
-                    duration.hours
-                  } hours ${Math.round(duration.minutes)} minutes`}</Text>
+                <FlexContainer
+                  key={`session-${index}`}
+                  style={{ padding: "12px" }}
+                >
+                  <FlexContainer
+                    style={{ flexDirection: "column", minWidth: "fit-content" }}
+                  >
+                    <Text>{timestampString}</Text>
+                    <Text>{`${duration.hours} hours ${Math.round(
+                      duration.minutes
+                    )} minutes`}</Text>
+                  </FlexContainer>
                   <ResponsiveContainer height={160}>
-                    <BarChart
-                      data={session.ascents}
-                      margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
-                    >
-                      <XAxis dataKey="month" />
+                    <BarChart data={session.ascents}>
+                      <XAxis dataKey="grade" />
                       <YAxis />
                       <Bar
                         type="monotone"
@@ -273,14 +301,18 @@ const App = () => {
                 flex: 0.5,
               }}
             >
-              {Object.entries(newAscentsByGrade).map(([grade, count]) => (
-                <>
-                  <Text>{grade}</Text>
-                  <button onClick={() => handleAscentRemoved(grade)}>-</button>
-                  <Text>{count}</Text>
-                  <button onClick={() => handleAscentAdded(grade)}>+</button>
-                </>
-              ))}
+              {Object.entries(newAscentsByGrade).map(
+                ([grade, count], index) => (
+                  <div key={`grade-input-${index}`}>
+                    <Text>{grade}</Text>
+                    <button onClick={() => handleAscentRemoved(grade)}>
+                      -
+                    </button>
+                    <Text>{count}</Text>
+                    <button onClick={() => handleAscentAdded(grade)}>+</button>
+                  </div>
+                )
+              )}
             </div>
           </FlexContainer>
           <FlexContainer style={{ justifyContent: "space-between" }}>

@@ -1,5 +1,13 @@
 import { DateTime, Info } from "luxon";
 
+export const gyms = [
+  "TK Nekala",
+  "TK Lielahti",
+  "Kiipeilyareena Ristikko",
+  "Kiipeilyareena Salmisaari",
+  "Kiipeilyareena Kalasatama",
+];
+
 export const grades = [
   "3",
   "4",
@@ -16,31 +24,6 @@ export const grades = [
   "7b",
   "7b+",
 ] as const;
-
-export const gradeColors = {
-  "3": "#66B572",
-  "4": "#66B572",
-  "5": "#E7C300",
-  "5+": "#E7C300",
-  "6a": "#4069A7",
-  "6a+": "#4069A7",
-  "6b": "#4069A7",
-  "6b+": "#FF9533",
-  "6c": "#FF9533",
-  "6c+": "#FF9533",
-  "7a": "#FF9533",
-  "7a+": "#C62D37",
-  "7b": "#C62D37",
-  "7b+": "#C62D37",
-};
-
-export const gyms = [
-  "TK Nekala",
-  "TK Lielahti",
-  "Kiipeilyareena Ristikko",
-  "Kiipeilyareena Salmisaari",
-  "Kiipeilyareena Kalasatama",
-];
 
 export type Ascent = {
   id: string;
