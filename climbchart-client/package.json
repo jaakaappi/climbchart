@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build --outDir ../docs --emptyOutDir ",
-    "build:gh": "tsc && vite build --outDir ../docs --emptyOutDir --base /climbchart/",
+    "build:gh": "set VITE_GH_BUILD=true && tsc && vite build --outDir ../docs --emptyOutDir --base /climbchart/",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

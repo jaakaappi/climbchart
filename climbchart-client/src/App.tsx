@@ -5,8 +5,6 @@ import {
   BarChart,
   Bar,
   Rectangle,
-  Line,
-  ComposedChart,
 } from "recharts";
 import { useMemo, useState } from "react";
 import { v4 } from "uuid";
@@ -25,12 +23,12 @@ import { Calendar } from "./components/Calendar";
 import {
   Ascent,
   grades,
-  allMonthlySessions,
   ascentsByGradeThisMonth,
   climbingDaysThisMonth,
   sessionData,
   gyms,
 } from "./testData";
+import { MonthlyAscentsCard } from "./cards/MonthlyAscentsCard";
 
 const App = () => {
   // Main view
@@ -82,37 +80,14 @@ const App = () => {
             Climb Chart
           </Text>
         </Card>
-        <Card style={{ flexGrow: 1 }}>
-          <FlexContainer style={{ flexDirection: "column" }}>
-            <Text bold title>
-              Sessions this year
-            </Text>
-            <ResponsiveContainer minHeight={150}>
-              <ComposedChart data={allMonthlySessions}>
-                <XAxis dataKey="month" height={18} />
-                <YAxis width={20} yAxisId="left" orientation="left" />
-                <YAxis width={30} yAxisId="right" orientation="right" />
-                <Bar
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="count"
-                  fill="#E7C300"
-                />
-                <Line yAxisId="right" type="monotone" dataKey="duration" />
-              </ComposedChart>
-            </ResponsiveContainer>
-            <Text style={{ textAlign: "center" }}>
-              Bars, left: count. Line, right: duration
-            </Text>
-          </FlexContainer>
-        </Card>
+        <MonthlyAscentsCard />
         <FlexContainer style={{ flexWrap: "wrap" }}>
-          <Card style={{ flexGrow: 2 }}>
-            <FlexContainer style={{ flexDirection: "column" }}>
+          <Card style={{ flexGrow: 2, display: "flex" }}>
+            <FlexContainer style={{ flexDirection: "column", flex: 1 }}>
               <Text bold title>
                 Sends this month
               </Text>
-              <ResponsiveContainer minHeight={150}>
+              <ResponsiveContainer minHeight={150} style={{ flex: 1 }}>
                 <BarChart data={ascentsByGradeThisMonth}>
                   <XAxis dataKey="grade" />
                   <YAxis width={20} />
@@ -174,6 +149,7 @@ const App = () => {
                     }}
                   >
                     <Text>{timestampString}</Text>
+                    <Text>{session.location}</Text>
                     <Text>{`${duration.hours} hours ${Math.round(
                       duration.minutes
                     )} minutes`}</Text>

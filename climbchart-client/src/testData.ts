@@ -57,6 +57,7 @@ export const sessionData = Array.from({ length: 12 })
     return {
       startTime,
       endTime,
+      location: gyms[Math.round(Math.random() * (gyms.length - 1))],
       ascents: grades.map((grade) => {
         return { grade, count: Math.round(Math.random() * 10) };
       }),
