@@ -19,7 +19,6 @@ import { FlexContainer } from "./components/FlexContainer";
 import { Text } from "./components/Text";
 import addIconUrl from "../assets/add.svg";
 import closeIconUrl from "../assets/close.svg";
-import { Calendar } from "./components/Calendar";
 import {
   Ascent,
   grades,
@@ -29,6 +28,8 @@ import {
   gyms,
 } from "./testData";
 import { MonthlyAscentsCard } from "./cards/MonthlyAscentsCard";
+import { CalendarCard } from "./cards/CalendarCard";
+import { MonthlySendsCard } from "./cards/MonthlySendsCard";
 
 const App = () => {
   // Main view
@@ -82,34 +83,8 @@ const App = () => {
         </Card>
         <MonthlyAscentsCard />
         <FlexContainer style={{ flexWrap: "wrap" }}>
-          <Card style={{ flexGrow: 2, display: "flex" }}>
-            <FlexContainer style={{ flexDirection: "column", flex: 1 }}>
-              <Text bold title>
-                Sends this month
-              </Text>
-              <ResponsiveContainer minHeight={150} style={{ flex: 1 }}>
-                <BarChart data={ascentsByGradeThisMonth}>
-                  <XAxis dataKey="grade" />
-                  <YAxis width={20} />
-                  <Bar type="monotone" dataKey="count" shape={CustomColorBar} />
-                </BarChart>
-              </ResponsiveContainer>
-            </FlexContainer>
-          </Card>
-          <Card style={{ flexGrow: 1 }}>
-            <FlexContainer
-              style={{ flexDirection: "column", alignItems: "center", gap: 8 }}
-            >
-              <Text bold title>
-                Session calendar
-              </Text>
-              <Calendar
-                year={DateTime.now().year}
-                month={DateTime.now().month}
-                coloredDays={climbingDaysThisMonth}
-              />
-            </FlexContainer>
-          </Card>
+          <MonthlySendsCard ascentsByGradeThisMonth={ascentsByGradeThisMonth} />
+          <CalendarCard coloredDays={climbingDaysThisMonth} />
         </FlexContainer>
         <Card style={{ flexGrow: 1 }}>
           <Text bold title>
@@ -144,7 +119,7 @@ const App = () => {
                   <FlexContainer
                     style={{
                       flexDirection: "column",
-                      minWidth: "fit-content",
+                      minWidth: 200,
                       flexGrow: 1,
                     }}
                   >
@@ -157,7 +132,7 @@ const App = () => {
                   <FlexContainer
                     style={{
                       flexGrow: 1,
-                      minWidth: "75%",
+                      minWidth: "50%",
                     }}
                   >
                     <ResponsiveContainer minHeight={128}>

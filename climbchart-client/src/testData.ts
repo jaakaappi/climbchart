@@ -33,7 +33,7 @@ export type Ascent = {
 export const ascentsByGradeThisMonth = grades.map((grade) => {
   return {
     grade,
-    count: Math.round(Math.random() * 10 + 1),
+    count: Math.round(Math.random() * 10),
   };
 });
 

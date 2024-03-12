@@ -5,7 +5,6 @@ import {
   YAxis,
   Bar,
   Line,
-  Legend,
 } from "recharts";
 import { Card } from "../components/Card";
 import { FlexContainer } from "../components/FlexContainer";
@@ -25,6 +24,8 @@ export const MonthlyAscentsCard = () => {
     setMonthlyAscentsResponse(apiResponse);
   }, [apiResponse]);
 
+  const isMobile = window.innerWidth <= window.innerHeight;
+
   if (
     monthlyAscentsResponse.status === "initial" ||
     monthlyAscentsResponse.status === "fetching"
@@ -40,8 +41,10 @@ export const MonthlyAscentsCard = () => {
     monthlyAscentsResponse.data
   )
     return (
-      <Card>
-        <FlexContainer style={{ flexDirection: "column" }}>
+      <Card
+        style={{ display: "flex", ...(!isMobile ? { minHeight: 300 } : {}) }}
+      >
+        <FlexContainer style={{ flexDirection: "column", flex: 1 }}>
           <Text bold title>
             Sessions this year
           </Text>
@@ -56,10 +59,18 @@ export const MonthlyAscentsCard = () => {
                 dataKey="count"
                 fill="#E7C300"
               />
-              <Line yAxisId="right" type="monotone" dataKey="duration" />
-              <Legend verticalAlign="bottom" height={24} />
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="duration"
+                fill="#4069A7"
+              />
             </ComposedChart>
           </ResponsiveContainer>
+          <FlexContainer style={{ justifyContent: "center" }}>
+            <Text style={{ color: "#E7C300" }}>Count (bars)</Text>
+            <Text style={{ color: "#4069A7" }}>Duration (line)</Text>
+          </FlexContainer>
         </FlexContainer>
       </Card>
     );
