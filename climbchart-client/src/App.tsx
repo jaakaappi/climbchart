@@ -1,5 +1,5 @@
 import { Rectangle } from "recharts";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { v4 } from "uuid";
 import "react-calendar/dist/Calendar.css";
 import "@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css";
@@ -159,14 +159,14 @@ const App = () => {
             >
               {Object.entries(newAscentsByGrade).map(
                 ([grade, count], index) => (
-                  <div key={`grade-input-${index}`}>
+                  <Fragment key={"grade-input-row-" + index}>
                     <Text>{grade}</Text>
                     <button onClick={() => handleAscentRemoved(grade)}>
                       -
                     </button>
-                    <Text>{count}</Text>
+                    <Text style={{ textAlign: "center" }}>{count}</Text>
                     <button onClick={() => handleAscentAdded(grade)}>+</button>
-                  </div>
+                  </Fragment>
                 )
               )}
             </div>
