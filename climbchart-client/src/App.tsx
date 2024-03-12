@@ -1,11 +1,4 @@
-import {
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  BarChart,
-  Bar,
-  Rectangle,
-} from "recharts";
+import { Rectangle } from "recharts";
 import { useMemo, useState } from "react";
 import { v4 } from "uuid";
 import "react-calendar/dist/Calendar.css";
@@ -13,7 +6,6 @@ import "@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css";
 import "react-clock/dist/Clock.css";
 import "react-date-picker/dist/DatePicker.css";
 
-import { DateTime } from "luxon";
 import { Card } from "./components/Card";
 import { FlexContainer } from "./components/FlexContainer";
 import { Text } from "./components/Text";
@@ -30,12 +22,10 @@ import {
 import { MonthlyAscentsCard } from "./cards/MonthlyAscentsCard";
 import { CalendarCard } from "./cards/CalendarCard";
 import { MonthlySendsCard } from "./cards/MonthlySendsCard";
+import { SessionsCard } from "./cards/SessionsCard";
 
 const App = () => {
-  // Main view
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Modal
   const [newAscents, setNewAscents] = useState<Ascent[]>([]);
 
   const newAscentsByGrade = useMemo<{ [key: string]: number }>(
@@ -86,71 +76,7 @@ const App = () => {
           <MonthlySendsCard ascentsByGradeThisMonth={ascentsByGradeThisMonth} />
           <CalendarCard coloredDays={climbingDaysThisMonth} />
         </FlexContainer>
-        <Card style={{ flexGrow: 1 }}>
-          <Text bold title>
-            Last 10 sessions
-          </Text>
-          {sessionData
-            .slice(-11, -1)
-            .reverse()
-            .map((session, index) => {
-              const timestampString = session.startTime.hasSame(
-                DateTime.local(),
-                "day"
-              )
-                ? "Today"
-                : session.startTime.hasSame(
-                    DateTime.local().minus({ day: 1 }),
-                    "day"
-                  )
-                ? "Yesterday"
-                : session.startTime.toFormat("dd.MM.yyyy HH:mm");
-
-              const duration = session.endTime.diff(session.startTime, [
-                "hours",
-                "minutes",
-              ]);
-
-              return (
-                <FlexContainer
-                  key={`session-${index}`}
-                  style={{ padding: "12px", flexWrap: "wrap" }}
-                >
-                  <FlexContainer
-                    style={{
-                      flexDirection: "column",
-                      minWidth: 200,
-                      flexGrow: 1,
-                    }}
-                  >
-                    <Text>{timestampString}</Text>
-                    <Text>{session.location}</Text>
-                    <Text>{`${duration.hours} hours ${Math.round(
-                      duration.minutes
-                    )} minutes`}</Text>
-                  </FlexContainer>
-                  <FlexContainer
-                    style={{
-                      flexGrow: 1,
-                      minWidth: "50%",
-                    }}
-                  >
-                    <ResponsiveContainer minHeight={128}>
-                      <BarChart data={session.ascents}>
-                        <XAxis dataKey="grade" />
-                        <YAxis width={20} />
-                        <Bar
-                          type="monotone"
-                          dataKey="count"
-                          shape={CustomColorBar}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </FlexContainer>
-                </FlexContainer>
-              );
-            })}
-        </Card>
+        <SessionsCard sessions={sessionData} />
       </FlexContainer>
       <div
         style={{
