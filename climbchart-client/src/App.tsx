@@ -1,6 +1,5 @@
 import { Rectangle } from "recharts";
-import { Fragment, useMemo, useState } from "react";
-import { v4 } from "uuid";
+import { useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import "@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css";
 import "react-clock/dist/Clock.css";
@@ -10,50 +9,19 @@ import { Card } from "./components/Card";
 import { FlexContainer } from "./components/FlexContainer";
 import { Text } from "./components/Text";
 import addIconUrl from "../assets/add.svg";
-import closeIconUrl from "../assets/close.svg";
 import {
-  Ascent,
-  grades,
   ascentsByGradeThisMonth,
   climbingDaysThisMonth,
   sessionData,
-  gyms,
 } from "./testData";
-import { MonthlyAscentsCard } from "./cards/MonthlyAscentsCard";
+import { MonthlySessionsCard } from "./cards/MonthlySessionsCard";
 import { CalendarCard } from "./cards/CalendarCard";
 import { MonthlySendsCard } from "./cards/MonthlySendsCard";
 import { SessionsCard } from "./cards/SessionsCard";
+import { AddModal } from "./AddModal";
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newAscents, setNewAscents] = useState<Ascent[]>([]);
-
-  const newAscentsByGrade = useMemo<{ [key: string]: number }>(
-    () =>
-      newAscents.reduce(
-        (previous, currentAscent) => ({
-          ...previous,
-          [currentAscent.grade]: previous[currentAscent.grade] + 1,
-        }),
-        Object.fromEntries(grades.map((grade) => [grade, 0]))
-      ),
-    [newAscents]
-  );
-
-  const handleAscentAdded = (grade: string) => {
-    setNewAscents([...newAscents, { id: v4(), grade: grade }]);
-  };
-
-  const handleAscentRemoved = (grade: string) => {
-    if (newAscentsByGrade[grade] > 0) {
-      const newAscentsCopy = [...newAscents];
-      newAscentsCopy.splice(
-        newAscents.findIndex((ascent) => ascent.grade === grade),
-        1
-      );
-      setNewAscents([...newAscentsCopy]);
-    }
-  };
 
   return (
     <>
@@ -71,7 +39,7 @@ const App = () => {
             Climb Chart
           </Text>
         </Card>
-        <MonthlyAscentsCard />
+        <MonthlySessionsCard />
         <FlexContainer style={{ flexWrap: "wrap" }}>
           <MonthlySendsCard ascentsByGradeThisMonth={ascentsByGradeThisMonth} />
           <CalendarCard coloredDays={climbingDaysThisMonth} />
@@ -93,90 +61,7 @@ const App = () => {
       >
         <img src={addIconUrl} />
       </div>
-      <div
-        style={{
-          display: isModalOpen ? "inline-flex" : "none",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <FlexContainer
-          style={{
-            backgroundColor: "#ffffff",
-            boxShadow: "0 4px 8px rgb(0 0 0 / 0.4)",
-            borderRadius: 8,
-            flexDirection: "column",
-            marginLeft: "auto",
-            marginRight: "auto",
-            marginTop: 72,
-            padding: 16,
-            height: "fit-content",
-            alignItems: "stretch",
-          }}
-        >
-          <FlexContainer
-            style={{
-              justifyContent: "space-between",
-            }}
-          >
-            <Text>Add new session</Text>
-            <div onClick={() => setIsModalOpen(false)}>
-              <img src={closeIconUrl} />
-            </div>
-          </FlexContainer>
-          <FlexContainer>
-            <Text>Gym / outdoor area</Text>
-            <select>
-              {gyms.map((gym) => (
-                <option key={gym} value={gym.replace(" ", "").toLowerCase()}>
-                  {gym}
-                </option>
-              ))}
-            </select>
-          </FlexContainer>
-          <FlexContainer>
-            <Text>Session date and time</Text>
-            <Text>Start</Text>
-            <input type="datetime-local" />
-            <Text>End</Text>
-            <input type="time" />
-          </FlexContainer>
-          <FlexContainer>
-            <div style={{ flex: 0.5 }}>
-              <Text>Climbed routes</Text>
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "0.25fr 0.25fr 0.25fr 0.25fr",
-                columnGap: 8,
-                rowGap: 8,
-                flex: 0.5,
-              }}
-            >
-              {Object.entries(newAscentsByGrade).map(
-                ([grade, count], index) => (
-                  <Fragment key={"grade-input-row-" + index}>
-                    <Text>{grade}</Text>
-                    <button onClick={() => handleAscentRemoved(grade)}>
-                      -
-                    </button>
-                    <Text style={{ textAlign: "center" }}>{count}</Text>
-                    <button onClick={() => handleAscentAdded(grade)}>+</button>
-                  </Fragment>
-                )
-              )}
-            </div>
-          </FlexContainer>
-          <FlexContainer style={{ justifyContent: "space-between" }}>
-            <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-            <button>Save</button>
-          </FlexContainer>
-        </FlexContainer>
-      </div>
+      <AddModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };

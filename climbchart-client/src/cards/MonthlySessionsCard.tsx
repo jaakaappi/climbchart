@@ -13,7 +13,7 @@ import { allMonthlySessions } from "../testData";
 import { useEffect, useState } from "react";
 import { useApi, ResponseType } from "../useApi";
 
-export const MonthlyAscentsCard = () => {
+export const MonthlySessionsCard = () => {
   const [monthlyAscentsResponse, setMonthlyAscentsResponse] =
     useState<ResponseType>({ status: "initial" });
   const apiResponse = import.meta.env.VITE_GH_BUILD

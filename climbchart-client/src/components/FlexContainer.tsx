@@ -1,15 +1,23 @@
 import { PropsWithChildren } from "react";
 
 type FlexContainerProps = {
+  direction?: "row" | "column";
+  gap?: number;
   style?: React.CSSProperties;
 } & PropsWithChildren;
 
-export const FlexContainer = ({ children, style }: FlexContainerProps) => {
+export const FlexContainer = ({
+  children,
+  direction,
+  gap,
+  style,
+}: FlexContainerProps) => {
   return (
     <div
       style={{
         display: "flex",
-        gap: 16,
+        flexDirection: direction ?? "row",
+        gap: gap ?? 16,
         ...style,
       }}
     >
